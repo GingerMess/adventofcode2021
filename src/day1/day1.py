@@ -16,20 +16,20 @@ def count_single_increments(file_name='input.txt'):
 
 
 def count_sliding_window_increments(file_name='input.txt'):
-    total_increments = 0
+    increases = 0
     with open(file_name, mode='r', encoding="utf-8") as f:
-        previous = deque([])
-        for i in range(3):  # populate our previous window with the first 3 numbers
-            previous.append(int(f.readline()))
-        previous_window = sum(previous)
+        queue = deque([])
+        for i in range(3):  # populate our queue with the first 3 numbers
+            queue.append(int(f.readline()))
+        previous_total = sum(queue)  # sum the first 3 numbers to create our first window total
         for line in f:
-            previous.append(int(line))  # add the newest number, queue size is now 4
-            previous.popleft()  # remove the oldest number, queue size is now 3
-            this_window = sum(previous)  # sum the queue, which now contains our new window
-            if this_window > previous_window:
-                total_increments += 1
-            previous_window = this_window  # set previous window to this window
-    return total_increments
+            queue.append(int(line))  # add the newest number, queue size is now 4
+            queue.popleft()  # remove the oldest number, queue size is now 3
+            current_total = sum(queue)  # sum the queue, which now contains our current window's total
+            if current_total > previous_total:
+                increases += 1
+            previous_total = current_total  # set previous total to this window's total
+    return increases
 
 
 increments = count_single_increments()
