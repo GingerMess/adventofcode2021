@@ -11,7 +11,7 @@ def calculate_position_depth(file_name):
     return position, depth
 
 
-final_position, final_depth = calculate_position_depth("input.txt")
+final_position, final_depth = calculate_position_depth("input/day2.txt")
 print(f'Position x depth (part 1): {final_position*final_depth}')
 
 
@@ -30,5 +30,5 @@ def calculate_position_depth_aim(file_name):
     return position, depth, aim
 
 
-final_position, final_depth, final_aim = calculate_position_depth_aim("input.txt")
+final_position, final_depth, final_aim = calculate_position_depth_aim("input/day2.txt")
 print(f'Position x depth (part 2): {final_position * final_depth}')

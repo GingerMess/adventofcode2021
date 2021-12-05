@@ -2,7 +2,7 @@ import sys
 from collections import deque
 
 
-def count_single_increments(file_name='input.txt'):
+def count_single_increments(file_name='input/day1.txt'):
     with open(file_name, mode='r', encoding="utf-8") as f:
         increases = 0
         previous = sys.maxsize
@@ -15,7 +15,7 @@ def count_single_increments(file_name='input.txt'):
         return increases
 
 
-def count_sliding_window_increments(file_name='input.txt'):
+def count_sliding_window_increments(file_name='input/day1.txt'):
     increases = 0
     with open(file_name, mode='r', encoding="utf-8") as f:
         queue = deque([])

@@ -29,7 +29,7 @@ def read_all_data(file_name):
         return list(line.strip() for line in f)
 
 # part 1 - gamma and epsilon
-original_data = read_all_data("input.txt")
+original_data = read_all_data("input/day3.txt")
 most_common = most_common_bits(original_data, '1')
 least_common = ''.join('1' if char == '0' else '0' for char in most_common)  # bitwise inverse (man i hate python sometimes)
 gamma = int(most_common, 2)
