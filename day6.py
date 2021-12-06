@@ -1,41 +1,39 @@
 import dataclasses
+
 import common
 
 
 @dataclasses.dataclass
-class LanternFish:
-    timer: int = 8
+class FishTracker:
+    fish_by_timer_value: dict
+
+    def add_fish(self, timer_value):
+        self.fish_by_timer_value[timer_value] = self.fish_by_timer_value.get(timer_value, 0) + 1
 
     def tick(self):
-        self.timer -= 1
-        if self.timer < 0:
-            self.timer = 6
-            return self.spawn()
-        return None
+        # number of new fish = number of fish at timer 0. this also represents number of fish that just had offspring.
+        new_fish = self.fish_by_timer_value.get(0, 0)
+        # decrement all fish timers
+        for timer_value in range(0, 8):
+            self.fish_by_timer_value[timer_value] = self.fish_by_timer_value.get(timer_value+1, 0)
+        # spawn new fish
+        self.fish_by_timer_value[8] = new_fish
+        # insert fish that spawned into timer 6
+        self.fish_by_timer_value[6] = self.fish_by_timer_value.get(6, 0) + new_fish
 
-    def spawn(self):
-        return LanternFish()
-
-    def __str__(self):
-        return str(self.timer)
-
-    def __repr__(self):
-        return self.__str__()
+    def total_fish(self):
+        return sum(pair[1] for pair in self.fish_by_timer_value.items())
 
 
 data = ''.join(common.read_all_data("input/day6.txt")).strip()
 data = [int(num) for num in data.split(',')]
-fish = []
+tracker = FishTracker({})
 # existing fish
 for existing_fish_timer in data:
-    fish.append(LanternFish(existing_fish_timer))
+    tracker.add_fish(existing_fish_timer)
+# go go gadget fish!
 days = 80
 for day in range(0, days):
-    new_fish = []
-    for f in fish:
-        result = f.tick()
-        if result is not None:
-            new_fish.append(result)
-    fish.extend(new_fish)
+    tracker.tick()
 
-print(f"Fish after {days} days: {len(fish)}")
+print(f"Fish after {days} days: {tracker.total_fish()}")
