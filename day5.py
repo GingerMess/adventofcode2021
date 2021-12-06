@@ -13,9 +13,18 @@ class Grid:
     def apply(self, line):
         xstep = -1 if line.start.x > line.end.x else 1
         ystep = -1 if line.start.y > line.end.y else 1
-        for x in range(line.start.x, line.end.x + xstep, xstep):
-            for y in range(line.start.y, line.end.y + ystep, ystep):
+        if line.start.x == line.end.x or line.start.y == line.end.y:
+            # we have a horizontal or vertical line
+            for x in range(line.start.x, line.end.x + xstep, xstep):
+                for y in range(line.start.y, line.end.y + ystep, ystep):
+                    self.apply_point(Point(x, y))
+        else:
+            # we have a diagonal
+            increment = 0
+            for x in range(line.start.x, line.end.x + xstep, xstep):
+                y = line.start.y + (increment * ystep)
                 self.apply_point(Point(x, y))
+                increment += 1
 
     def apply_point(self, point):
         count = self.squares.get(point, 0)
@@ -63,7 +72,7 @@ class Line:
         self.start = start
         self.end = end
 
-
+# read data
 data = common.read_all_data("input/day5.txt")
 horizontal_vertical_lines = []
 other_lines = []
@@ -78,11 +87,25 @@ for line in data:
     else:
         other_lines.append(Line(start, end))
 grid = Grid()
+
+# part 1
 line_number = 1
 for line in horizontal_vertical_lines:
     grid.apply(line)
-    print(f"Processed h/v line {line_number}/{len(horizontal_vertical_lines)} ({line})")
+    #print(f"Processed h/v line {line_number}/{len(horizontal_vertical_lines)} ({line})")
     line_number += 1
 
+print("Part 1:")
+print(f"Highest count: {grid.highest_count()}")
+print(f"Total squares with overlap: {grid.squares_with_count_equal_or_greater(2)}")
+
+# part 2
+line_number = 1
+for line in other_lines:
+    grid.apply(line)
+    #print(f"Process d line {line_number}/{len(other_lines)} ({line})")
+    line_number += 1
+
+print("\nPart 2:")
 print(f"Highest count: {grid.highest_count()}")
 print(f"Total squares with overlap: {grid.squares_with_count_equal_or_greater(2)}")
